@@ -186,6 +186,7 @@ Tus archivos están ignorados por Git, así que actualizar no los toca.
 - **No hay registro automático de la conversación.** El agente escribe la nota mientras avanza; si falta algo, pídele `actualiza las notas`.
 - **La respuesta de cada quiz vive solo en la memoria del modelo** hasta que respondes. No se muestra ni se guarda en archivos, pero tampoco está protegida técnicamente.
 - **El modelo puede equivocarse,** sobre todo con PDFs escaneados o manuscritos. Si algo no cuadra, pide `verifícalo en el material` o `verifícalo con Python`. Como referencia: Gemini 3.8 Flash (High) resolvió bien, con verificación numérica, una pregunta de 50 puntos de un certamen de Computación Científica.
+- **El chat de T3 no muestra fórmulas LaTeX** (`$x^2$` aparece tal cual). Por eso el agente escribe las fórmulas del chat con símbolos (`Aᵀr = 0`, `x ∈ ℝⁿ`, `‖r‖₂`) y usa LaTeX solo en las notas, que Obsidian sí muestra. Si algún día tu cliente muestra LaTeX, pon `Fórmulas en el chat: latex` en `perfil.md`.
 - Las instrucciones del agente están en inglés a propósito, porque los modelos las siguen mejor. Todo lo que tú ves sale en español.
 
 ## 10. Estructura

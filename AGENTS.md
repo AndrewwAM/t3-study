@@ -54,6 +54,21 @@ If `ramos/<ramo>/curso.md` does not exist, offer to run `study-course-setup` fir
 - **course** — `material/` is canonical for evaluations. Teach the more precise version when standard theory differs, and flag the difference so the learner knows what to write on the test. When `material-adicional/` differs from `material/`, flag it the same way and use `material/`.
 - **independent** — primary or nameable sources only. No "what the professor said."
 
+## Math: Unicode in chat, LaTeX in notes
+
+T3 Code's chat does **not** render LaTeX: `$...$` and `$$...$$` show up as raw text. Unless `perfil.md` sets `Fórmulas en el chat: latex`:
+
+- **In chat** (explanations, quizzes, grading), write math with Unicode symbols, never `$`:
+  - inline: `Ax = b`, `PA = LU`, `x ∈ ℝⁿ`, `A ∈ ℝᵐˣⁿ`, `Aᵀ`, `A⁻¹`, `‖r‖₂`, `x̂`, `κ(A) = σ₁/σₙ`, `xₖ₊₁ = xₖ − f(xₖ)/f′(xₖ)`, `Σᵢ wᵢ f(xᵢ)`, `∫ₐᵇ f(x) dx`, `ε_mach ≈ 2.2·10⁻¹⁶`, `≤ ≥ ≠ ≈ → ⇒ ⊥ ∂ ∇ √ ∞`.
+  - Put a formula on its own line inside a fenced code block when it is long, has fractions or matrices, or needs alignment:
+    ```
+    Rx = Qᵀb        (Q: m×n ortonormal, R: n×n triangular superior)
+    ```
+  - Matrices as aligned rows in a code block, or described in words.
+  - Code identifiers stay in backticks as usual.
+- **In notes** under `notas/` (rendered by Obsidian), use LaTeX: inline `$...$`, display `$$...$$`.
+- The same formula can appear twice: Unicode in the chat message, LaTeX in the note.
+
 ## Quizzes are chat-only by default
 
 Graded questions are written in the chat and answered by typing (`2`, `1 y 3`, `no sé`). Do not use a clickable selection tool for graded questions unless the learner explicitly asks for clickable options; see `study-quiz`.

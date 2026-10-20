@@ -114,4 +114,4 @@ Add a picture only when it clarifies a node, following `study-visualize`.
 
 ## Formatting
 
-Math as LaTeX: inline `$f(x)$`, display on its own lines with `$$`. Code in fenced blocks with a language tag.
+Math follows `AGENTS.md` → *Math*: Unicode symbols in chat (T3 does not render LaTeX), LaTeX (`$...$`, `$$...$$`) in the notes under `notas/`. Code in fenced blocks with a language tag.

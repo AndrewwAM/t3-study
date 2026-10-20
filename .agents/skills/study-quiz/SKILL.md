@@ -18,6 +18,7 @@ One question at a time, in the chat. The learner answers by typing. You grade on
 7. **Shuffle** before showing: the correct option's position must vary across quizzes. Never keep it in the position you wrote it.
 8. Read the finished set cold. If you can tell which option is right without knowing the material, regenerate — do not patch.
 9. Any number in a stem, option, or explanation must be verified first (compute it with Python when available).
+10. In the chat, write math in options and stems with Unicode (`PAx = Pb`, `Ly = Pb`, `Aᵀr = 0`), never `$...$` — see `AGENTS.md` → *Math*. Use LaTeX only when copying the graded quiz into the note.
 
 Decide the answer key before showing the question and do not reveal it, hint at it, or let it leak through wording until the learner answers.
 
