@@ -1,0 +1,11 @@
+# Material de los ramos y notas personales: no se suben al repo del framework.
+/ramos/*
+!/ramos/_ejemplo/
+/notas/
+/perfil.md
+
+# Trabajo temporal del agente
+notas/.scratch/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
