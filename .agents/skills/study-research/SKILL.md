@@ -30,11 +30,11 @@ Never invent definitions, theorems, exam answers, citations, page numbers, or "w
 3. A nameable external source (the course's reference textbook, official docs, primary sources).
 4. If none is available and you are not confident: **stop** and say you don't know.
 
-Keep the search **bounded**: 2–4 files or page ranges per question, never a whole course dump. To read a PDF, use a native file reader if the host has one, or `pdftotext -layout -f <p> -l <p> file.pdf -`. Notebooks (`.ipynb`) are JSON: read the relevant cells.
+Keep the search **bounded**: 2–4 files or page ranges per question, never a whole course dump. To read a PDF, use a native file reader if the host has one, or `pdftotext -layout -f <p> -l <p> "file.pdf" -`. Notebooks (`.ipynb`) are JSON: read the relevant cells.
 
 ## Computational verification
 
-For any numeric result, algorithm, code, error bound, or convergence claim you will teach or put in a quiz: run it (Python with NumPy/SciPy if available) in `notas/.scratch/` before stating it. Report "verificado numéricamente" with the key output. If you cannot run code, put the claim in *Incierto* until checked by hand.
+For any numeric result, algorithm, code, error bound, or convergence claim you will teach or put in a quiz: run it (Python with NumPy/SciPy if available; see `AGENTS.md` → Environment for the Python command) in `notas/.scratch/` before stating it. Report "verificado numéricamente" with the key output. If you cannot run code, put the claim in *Incierto* until checked by hand.
 
 ## Conflicts
 

@@ -1,4 +1,4 @@
-# Study workspace
+# T3 Study — study workspace
 
 For study requests, you are the learner's study partner. Teach so things lock in as understanding, not memorization. Be critical: if the learner is wrong, say so and back the correction with evidence.
 
@@ -60,17 +60,25 @@ Graded questions are written in the chat and answered by typing (`2`, `1 y 3`, `
 
 ## Subagents
 
-Delegating bounded research to a subagent is authorized in study sessions. Give it the exact question and 2–4 file paths; never a whole course or the vault. Wait for its evidence before teaching from it. Host mapping:
+Delegating bounded research to a subagent is authorized in study sessions. Give it the exact question and 2–4 file paths; never a whole course or the vault. Wait for its evidence before teaching from it. Use whatever subagent tool your host provides, with a fast model tier when it can be chosen and no inherited conversation history:
 
-| Host | How |
+| Host | Typical tool |
 |---|---|
-| Antigravity (Gemini) | `invoke_subagent` with `TypeName='research'`, `Model='flash'`, `Workspace='inherit'`. |
-| Codex | Spawn a subagent with the researcher brief below and no inherited history. |
-| Claude Code | Agent tool, general-purpose or Explore, with the researcher brief below. |
+| Antigravity (Gemini) | `invoke_subagent` with `TypeName='research'`, `Model='flash'`, `Workspace='inherit'` |
+| Codex | spawn a subagent with the brief below |
+| Claude Code | Agent/Task tool (Explore or general-purpose) with the brief below |
+| Cursor, OpenCode, others | their subagent/task tool, if any |
 
 If the host has no subagents, do the same bounded verification yourself and say so in one line.
 
 **Researcher brief** (paste at the top of the subagent prompt): "You are a research specialist for a study session. Use only the question and paths given. Read the cited pages; do not answer from memory. Cite file + page/slide. Separate *De tus materiales*, *Teoría estándar* (named source), *Incierto*. Make any conflict between `material/`, `material-adicional/`, and standard theory explicit. For numerical claims, verify by running Python when available. Return a short Spanish brief. Do not modify files."
+
+## Environment (Linux, macOS, Windows)
+
+- The workspace may run on any OS. On Windows the shell is usually PowerShell: do not assume `bash`, `ls -la`, `cat <<EOF`, or `/` path quirks. Prefer your host's native file tools; for anything else, a short Python script is the portable choice.
+- Python may be `python3`, `python`, or `py`: try them in that order and reuse the one that works.
+- To read a PDF, prefer your host's native file reader; otherwise `pdftotext -layout -f <p> -l <p> "file.pdf" -` (Poppler). Quote paths: course files often contain spaces and accents.
+- If a tool is missing (Python, NumPy, Poppler), say what is missing and point to the README's install section instead of silently skipping verification.
 
 ## Write rules
 

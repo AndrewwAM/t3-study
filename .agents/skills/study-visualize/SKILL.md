@@ -31,4 +31,4 @@ If you cannot view images, say the picture was not visually checked. If no corre
 
 ## Delegation
 
-A diagram may be delegated to a subagent (Antigravity: `invoke_subagent`, `TypeName='self'`, `Model='flash'`) with one concrete brief and the target path; the subagent must render and look at the PNG before returning. For small pictures, do it yourself.
+A diagram may be delegated to a subagent (see `AGENTS.md` → Subagents) with one concrete brief and the target path; the subagent must render and look at the PNG before returning. For small pictures, do it yourself.

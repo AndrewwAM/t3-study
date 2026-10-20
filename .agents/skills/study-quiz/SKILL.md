@@ -56,4 +56,4 @@ Write the quiz into the session note **only after grading**: question, options i
 
 ## Clickable options (only on request)
 
-Use a host selection tool (for example Antigravity's `ask_question`) for graded questions **only** when the learner explicitly asked for clickable options. Then still: shuffle yourself, include "0. No sé" as an option, put no hints in option text, grade only after the selection, and record it in the note exactly as above. Goal and preference questions may use such a tool whenever it helps.
+Use a host selection tool (for example `ask_question` in Antigravity or a question tool in Codex/Claude) for graded questions **only** when the learner explicitly asked for clickable options. Then still: shuffle yourself, include "0. No sé" as an option, put no hints in option text, grade only after the selection, and record it in the note exactly as above. Goal and preference questions may use such a tool whenever it helps.
