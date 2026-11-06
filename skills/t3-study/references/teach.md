@@ -1,11 +1,8 @@
----
-name: study-teach
-description: Run a study, review, exam-practice, or resumed lesson for the learner through probe → plan → teach, with verified sources, chat quizzes, and durable notes under notas/. Configuration and maintenance requests do not trigger this workflow.
----
-
 # Teaching
 
-Two principles. They are not tips — they are how you teach, every time. Learner-facing output is Spanish. These instructions are English.
+Internal lesson module; load only for an explicitly active `t3-study` lesson. All persistence below is conditional on saving being enabled in the shared skill. In no-save mode keep state/plan/quizzes in chat and do not create or update any notes.
+
+Two teaching principles guide the lesson. Learner-facing output follows perfil.md, defaulting to Spanish.
 
 The goal is never "they can recite the fact." The goal is **understanding**: the fact is derivable from foundations the learner already accepts, connected into their mental model, and therefore self-preserving.
 
@@ -21,7 +18,7 @@ The felt goal is **the click**: a pile of lonely facts collapsing into a few gen
 
 The brain will not fully commit to a fact it is not sure is safe to lock in. If something more fundamental might later contradict it, it hedges. Both principles below remove that risk.
 
-Accuracy is non-negotiable. Follow the `study-research` skill the moment you are even slightly unsure of a fact, name, formula, definition, or claim. A wrong foundation corrupts every node built on it.
+Accuracy is non-negotiable. Follow the [research](research.md) skill the moment you are even slightly unsure of a fact, name, formula, definition, or claim. A wrong foundation corrupts every node built on it.
 
 ## Principle i — Unconditional truths first
 
@@ -48,7 +45,7 @@ Facts feel arbitrary when there is no visible reason they had to be this way. Wa
 
 Choose per stretch:
 
-- **Socratic** — pose the motivating problem and let them attempt the discovery. Default when they can plausibly reason there. A gradable Socratic step is a quiz (follow `study-quiz`).
+- **Socratic** — pose the motivating problem and let them attempt the discovery. Default when they can plausibly reason there. A gradable Socratic step is a quiz (follow [quizzes](quiz.md)).
 - **Expository** — narrate the motivated discovery path (3Blue1Brown style). Use when the topic is beyond cold-reasoning reach, or they are low-energy.
 
 ## The process: probe → plan → teach
@@ -57,11 +54,11 @@ Run all three phases in order, every time. Scale each phase's *size* to the topi
 
 ### Start or resume
 
-1. Resolve the lane and scope as in `AGENTS.md`. For a course, read `ramos/<ramo>/curso.md` first; it maps evaluations to units and files.
-2. New topic: create `notas/<ramo>/<tema>/` with `_state.md` and `sessions/YYYY-MM-DD-slug.md` copied from `templates/`. Add the topic to `notas/index.md`.
+1. Resolve the lane and scope as in [workspace.md](workspace.md). For a course, read `ramos/<ramo>/curso.md` first; it maps evaluations to units and files.
+2. New topic with saving enabled: create `notas/<ramo>/<tema>/` with `_state.md` and `sessions/YYYY-MM-DD-slug.md` copied from `templates/`. Add the topic to `notas/index.md`.
 3. Resume: read `_state.md` and the last session. Skip only work already done: if the edge is already bracketed, do not re-probe those strands; if a plan was already approved, do not re-plan unless the goal changed. A question marked *pendiente* in the last session is asked again first.
 
-There is no automatic transcript. **You** keep the session note current: append each quiz after it is graded (never write an answer key before the learner answers), the plan, and each finished node as it happens, not only at the end.
+There is no automatic transcript. When saving is enabled, **you** keep the session note current: append each quiz after it is graded (never write an answer key before the learner answers), the plan, and each finished node as it happens, not only at the end.
 
 ### Phase 1 — Probe (never skip on a new topic)
 
@@ -82,13 +79,13 @@ Do not advance to Phase 2 until, for each goal-relevant strand, you can state wh
 
 Highest-leverage step. With level and goal in hand:
 
-- Scope the field with research first: the evaluation's units in `material/`, plus past evaluations and rubrics in `material-adicional/` when they exist. Delegate this bounded scope to a research subagent (see `AGENTS.md`) and wait for its evidence.
+- Scope the field with research first: the evaluation's units in `material/`, plus past evaluations and rubrics in `material-adicional/` when they exist. Delegate this bounded scope to the configured research role (see [models.md](models.md)) when delegation is enabled and wait for its evidence.
 - What are the unconditional truths? Which do they already hold? Build from there.
 - What is the motivated discovery path from those truths to their goal?
 - Socratic or expository for each stretch?
 - Near an evaluation: what kinds of exercises appear in past evaluations, and how are they graded? Plan nodes so the learner can do those exercises, not only explain the ideas.
 
-Present the plan in chat **and** in the session note, always, before any teaching:
+Present the plan in chat and, when saving is enabled, in the session note, before teaching:
 
 1. **The approach, in prose** (Spanish). What, in what order, and why — given their edge, their goal, and the time left before the evaluation.
 2. **The dependency map.** A small Mermaid DAG: unconditional truths at the roots, derived nodes hanging off them, the goal as the sink. This map *is* the teaching order.
@@ -108,10 +105,10 @@ Build their dependency graph one **node** at a time. For every node:
 
 For computational courses, add an **exercise** after the quiz-check when the evaluation asks for algorithms or code: an exam-style item, the learner attempts it, you grade it against the rubric style, then show a model answer.
 
-Persist after every node: append it to the session note and update `_state.md` (edge per strand, next DAG node, open conflicts, pointer to this session). If the session stops mid-node, write the pending question and where you stopped in `_state.md` → *Notas de retoma*.
+When saving is enabled, persist after every node: append it to the session note and update `_state.md` (edge per strand, next DAG node, open conflicts, pointer to this session). If the session stops mid-node, write the pending question and where you stopped in `_state.md` → *Notas de retoma*.
 
-Add a picture only when it clarifies a node, following `study-visualize`.
+Add a picture only when it clarifies a node, following [visuals](visualize.md).
 
 ## Formatting
 
-Math follows `AGENTS.md` → *Math*: Unicode symbols in chat (T3 does not render LaTeX), LaTeX (`$...$`, `$$...$$`) in the notes under `notas/`. Code in fenced blocks with a language tag.
+Math follows [workspace.md](workspace.md) → Math: Unicode symbols in chat by default (unless the learner selects LaTeX), LaTeX (`$...$`, `$$...$$`) in the notes under `notas/`. Code in fenced blocks with a language tag.

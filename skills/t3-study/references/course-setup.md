@@ -1,8 +1,3 @@
----
-name: study-course-setup
-description: Add or update a course in ramos/ - create the folder layout and write ramos/<ramo>/curso.md (evaluations, dates, units, file map) from the syllabus. Use for "nuevo ramo X", "configurar ramo X", or when a study request names a course without curso.md.
----
-
 # Course setup
 
 This is maintenance work: no probes, no teaching plan.

@@ -1,17 +1,12 @@
----
-name: study-research
-description: Ground every teaching claim before using it. Course material first, then nameable sources; computational claims verified by running code. Separate materials / standard theory / uncertain, flag conflicts, and stop when unsure.
----
-
 # Research (correctness)
 
 Trust is the bottleneck. One confidently delivered hallucination poisons the teacher. Working from memory is where models invent things. Verify, then teach.
 
-Learner-facing output is Spanish. These instructions are English.
+Learner-facing output follows perfil.md, defaulting to Spanish.
 
 ## Delegation
 
-Delegate the topic map before planning, or a substantive uncertain claim, to a research subagent as described in `AGENTS.md` (exact question, lane, goal, 2–4 paths). Wait for the evidence before teaching from it. The subagent must have read what it cites; a plausible brief is not proof. Resolve contradictions or park the node as *Incierto*. For a simple check already supported by a file you just read, cite it directly instead of spawning work.
+For a topic map or substantive uncertain claim, use `study_researcher` when the selected profile enables delegation; otherwise perform the same bounded verification in the parent and disclose that there was no independent review. Follow [models.md](models.md), giving the exact question, lane, goal and 2–4 absolute source paths. Wait for evidence before teaching from it. The child must read what it cites; a plausible brief is not proof. For a simple check already supported by a file just read, cite it directly. Research children do not launch further children or run model setup.
 
 ## Three drawers
 
@@ -34,7 +29,7 @@ Keep the search **bounded**: 2–4 files or page ranges per question, never a wh
 
 ## Computational verification
 
-For any numeric result, algorithm, code, error bound, or convergence claim you will teach or put in a quiz: run it (Python with NumPy/SciPy if available; see `AGENTS.md` → Environment for the Python command) in `notas/.scratch/` before stating it. Report "verificado numéricamente" with the key output. If you cannot run code, put the claim in *Incierto* until checked by hand.
+For any numeric result, algorithm, code, error bound, or convergence claim you will teach or put in a quiz: run it (Python with NumPy/SciPy if available; see [workspace.md](workspace.md) → Environment for the Python command) before stating it, using `notas/.scratch/` only when saving is enabled, otherwise an OS temporary directory. Report "verificado numéricamente" with the key output. If you cannot run code, put the claim in *Incierto* until checked by hand.
 
 ## Conflicts
 
@@ -44,7 +39,7 @@ When sources diverge, say so in chat and in the session note:
 
 > **Conflicto material actual / adicional.** En `material-adicional/…` aparece X; en tu material actual (`material/…`) es Y. Para la evaluación, usa Y.
 
-Record open conflicts in `_state.md` until the learner dismisses them.
+When saving is enabled, record open conflicts in `_state.md` until resolved; otherwise keep them in chat.
 
 ## Stop rule
 
@@ -59,4 +54,4 @@ Pausing to verify is always acceptable. Accuracy beats flow.
 
 ## What to write down
 
-Add a short **Fuentes** list to the session note: path or URL, page, and which drawer it fed.
+When saving is enabled, add a short **Fuentes** list to the session note; otherwise provide it in chat: path or URL, page, and which drawer it fed.
