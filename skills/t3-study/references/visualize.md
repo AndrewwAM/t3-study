@@ -1,9 +1,6 @@
----
-name: study-visualize
-description: Add one correct explanatory picture to a lesson when a relationship, process, plot, or geometry is clearer as an image — Mermaid for structure, Python/matplotlib for plots and geometry, always checked before it is used.
----
-
 # Lesson visuals
+
+This is an internal active-lesson module. In no-save mode, use an OS temporary directory for scripts/figures, display the result in chat using host-supported tools, and do not create a viz/ folder or modify notes.
 
 Use a picture for dependencies, flows, sequences, function behavior, convergence, or spatial structure. Skip decoration and pictures that merely repeat a sentence. One idea per picture, fewest carrying elements.
 
@@ -31,4 +28,4 @@ If you cannot view images, say the picture was not visually checked. If no corre
 
 ## Delegation
 
-A diagram may be delegated to a subagent (see `AGENTS.md` → Subagents) with one concrete brief and the target path; the subagent must render and look at the PNG before returning. For small pictures, do it yourself.
+Use the configured `study_mermaid_maker` role for structural diagrams and `study_visual_maker` for plots, SVG or geometry when delegation is enabled; see [models.md](models.md). Give one concrete brief, source context, target path, and saving mode. A child must inspect any generated PNG before returning and must not delegate again. For small pictures or parent-only roles, do the work yourself. Follow the host's visual display rules; a file created on disk is not necessarily visible in chat.

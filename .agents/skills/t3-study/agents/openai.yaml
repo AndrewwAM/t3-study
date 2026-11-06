@@ -1,0 +1,5 @@
+interface:
+  display_name: "T3 Study"
+  short_description: "Estudio por invocación explícita, con notas opcionales"
+policy:
+  allow_implicit_invocation: false

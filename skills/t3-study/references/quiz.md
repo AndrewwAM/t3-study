@@ -1,9 +1,6 @@
----
-name: study-quiz
-description: Write, ask, and grade a diagnostic or learning-check quiz in the chat during a study session. Use for any question with a definite correct answer. Preference or goal questions are not quizzes.
----
-
 # Chat quizzes
+
+This module applies only within an explicitly active lesson. Any note writes below require saving to be enabled.
 
 One question at a time, in the chat. The learner answers by typing. You grade only after they answer.
 
@@ -18,7 +15,7 @@ One question at a time, in the chat. The learner answers by typing. You grade on
 7. **Shuffle** before showing: the correct option's position must vary across quizzes. Never keep it in the position you wrote it.
 8. Read the finished set cold. If you can tell which option is right without knowing the material, regenerate — do not patch.
 9. Any number in a stem, option, or explanation must be verified first (compute it with Python when available).
-10. In the chat, write math in options and stems with Unicode (`PAx = Pb`, `Ly = Pb`, `Aᵀr = 0`), never `$...$` — see `AGENTS.md` → *Math*. Use LaTeX only when copying the graded quiz into the note.
+10. In the chat, write math in options and stems with Unicode (`PAx = Pb`, `Ly = Pb`, `Aᵀr = 0`), never `$...$` — see [workspace.md](workspace.md) → Math. Use LaTeX only when copying the graded quiz into the note.
 
 Decide the answer key before showing the question and do not reveal it, hint at it, or let it leak through wording until the learner answers.
 
@@ -38,7 +35,7 @@ Decide the answer key before showing the question and do not reveal it, hint at 
 Responde con el número (o números, p. ej. `1 y 3`).
 ```
 
-Then **stop your turn and wait**. Silence or an unrelated message is not an answer: if the learner changes topic, mark the quiz *pendiente* in the session note and ask whether to come back to it.
+Then **stop your turn and wait**. Silence or an unrelated message is not an answer. If the learner switches to an ordinary task, leave study mode and handle that task; do not grade, insist on returning to the quiz, or write lesson notes as a side effect. On an explicit lesson pause, save the question without a key as pending only when saving is enabled.
 
 Open-answer questions (derive, compute, write the algorithm or code) are also quizzes: state what a complete answer must contain in your private key, wait, then grade item by item, giving partial credit like a rubric would.
 

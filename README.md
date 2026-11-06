@@ -1,208 +1,168 @@
 # T3 Study
 
-Un entorno de estudio para [T3 Code](https://github.com/pingdotgg/t3code). Abres un hilo, escribes `estudiar cc para el C2` y el agente actúa como profesor particular:
+Una skill de estudio para [T3 Code](https://github.com/pingdotgg/t3code), inspirada en [amosblomqvist/learn](https://github.com/amosblomqvist/learn). Sirve para ramos universitarios y temas independientes: diagnóstico → plan aprobado → enseñanza por conceptos, con quizzes y apuntes opcionales.
 
-1. **Diagnóstico.** Quizzes cortos para ver qué sabes.
-2. **Plan.** Te muestra un plan y espera tu aprobación.
-3. **Clases.** Enseña paso a paso.
+**El modo de estudio se activa solo cuando lo invocas.** Abrir un ramo, preguntar una duda, trabajar en código o decir “continuar” fuera de una lección no crea apuntes ni inicia un diagnóstico.
 
-Usa tu material del ramo como fuente y guarda notas de cada sesión para retomar donde quedaste.
-
-- **Cualquier ramo:** cada uno tiene su carpeta con su material.
-- **Cualquier proveedor de T3:** Antigravity (Gemini), Claude, Cursor, Codex u otro que lea `AGENTS.md`.
-- **Linux, macOS y Windows.**
-
-Está inspirado en [amosblomqvist/learn](https://github.com/amosblomqvist/learn).
-
----
-
-## 1. Requisitos
-
-| Qué | Para qué | Obligatorio |
-|---|---|---|
-| [T3 Code](https://github.com/pingdotgg/t3code) | La app donde conversas con el agente | Sí |
-| Al menos un proveedor configurado en T3 | El modelo que hace de profesor (ver [§3](#3-elegir-proveedor-y-modelo)) | Sí |
-| Git | Descargar y actualizar T3 Study | Sí |
-| Python 3 con `numpy`, `scipy`, `matplotlib` | El agente verifica cálculos y hace gráficos | Muy recomendado en ramos con cálculo |
-| Poppler (`pdftotext`) | Leer PDFs de forma confiable | Recomendado |
-| [Obsidian](https://obsidian.md) | Ver las notas con fórmulas y diagramas | Opcional |
-
-### Linux
-
-```bash
-# Ubuntu / Debian
-sudo apt install git python3-pip poppler-utils
-# Fedora
-sudo dnf install git python3-pip poppler-utils
-# Arch
-sudo pacman -S git python-pip poppler
-
-python3 -m pip install --user numpy scipy matplotlib
+```text
+Codex: $t3-study estudiar cc, mínimos cuadrados
+Claude: /t3-study tema independiente: transformers
 ```
 
-Si `pip` reclama un «externally managed environment», instala los paquetes de tu distribución (`python3-numpy python3-scipy python3-matplotlib`) o usa `pipx`/un entorno virtual.
+En otros proveedores de T3 que lean `AGENTS.md`, pide explícitamente: `Usa la skill t3-study de skills/t3-study/SKILL.md para estudiar cc`. La compatibilidad de herramientas depende del proveedor; el flujo dispone de una alternativa sin subagentes.
 
-### Windows (PowerShell)
+## Empezar
 
-```powershell
-winget install --id Git.Git -e
-winget install --id Python.Python.3.12 -e
-winget install --id oschwartz10612.Poppler -e
-py -m pip install numpy scipy matplotlib
+1. Clona el repo y abre su carpeta en T3 como proyecto:
+
+   ```text
+   git clone https://github.com/AndrewwAM/t3-study.git
+   ```
+
+2. Selecciona el proveedor/modelo que hará de profesor en el hilo. El framework no cambia esa elección ni tus preferencias globales.
+3. Opcionalmente, copia `perfil.example.md` a `perfil.md` y completa idioma, nombre y preferencias. Sin perfil, el agente usa español y te trata de “tú”.
+4. Agrega material en `ramos/<sigla>/material/` y pide `$t3-study configurar ramo <sigla>` (o `/t3-study ...` en Claude). Para un tema independiente puedes saltar este paso.
+5. Invoca la skill para estudiar. La primera vez en un workspace/equipo sin perfil de modelos, te propondrá una configuración disponible en tu T3 y esperará tu elección.
+
+Los adaptadores para Codex y Claude ya vienen en el repositorio como archivos normales; no necesitas enlaces simbólicos, instalar una skill global ni permisos de administrador. Puedes abrir una subcarpeta de ramo: las instrucciones resuelven las rutas desde la ubicación real de la skill. Si el cliente no descubre skills de carpetas superiores, abre el proyecto raíz o indica el archivo compartido explícitamente.
+
+Después de actualizar instrucciones o cambiar de versión, abre un hilo nuevo: una conversación existente puede conservar reglas anteriores.
+
+## Uso
+
+Los ejemplos usan Codex; en Claude reemplaza `$t3-study` por `/t3-study`.
+
+```text
+$t3-study estudiar cc para el C2
+$t3-study practicar cc C2
+$t3-study seguir cc
+$t3-study tema independiente: redes neuronales
+$t3-study estudiar cc, interpolación, sin guardar apuntes
+$t3-study configurar modelos
+$t3-study configurar ramo cc
 ```
 
-Después **cierra y vuelve a abrir T3 Code** (y la terminal) para que vea los programas nuevos. Comprueba con:
+Dentro de una lección activa puedes responder quizzes y decir `continuar` sin invocar otra vez la skill. `Salir del modo estudio` o cambiar a una tarea corriente termina ese flujo. Configurar cursos o modelos es mantenimiento: no inicia una clase ni exige aprobar un plan pedagógico.
 
-```powershell
-git --version; py --version; pdftotext -v
+El diagnóstico localiza lo que ya entiendes y lo que aún no. Luego el agente presenta el plan y espera tu aprobación antes de enseñar. Responde los quizzes en chat: `2`, `1 y 3`, `no sé` o tu desarrollo. Las soluciones no se guardan en archivos antes de que respondas.
+
+## Modelos de los subagentes
+
+El profesor conserva el modelo del hilo. Hay tres roles opcionales: investigación, diagramas Mermaid y gráficos/geometría. El agente puede ejecutarlos por sí mismo o delegarlos con T3.
+
+En la primera configuración, la skill:
+
+1. Consulta la identidad del entorno y los proveedores/modelos reportados por `orchestrator_capabilities`.
+2. Excluye proveedores deshabilitados y comprueba las opciones que admite cada modelo.
+3. Sugiere una combinación razonada para los roles y pregunta si aceptas, personalizas o prefieres trabajar sin subagentes.
+4. Guarda la elección solo después de tu respuesta en `study-models.json`, separado por `environmentId` del equipo.
+
+No se distribuyen proveedores personales, nombres de modelos fijos ni una configuración de otro usuario. Los perfiles existentes se reutilizan; no hay sustituciones silenciosas. Cuando el catálogo es parcial, un modelo ausente se trata como no verificado y se busca antes de descartarlo. Las sugerencias no son un benchmark ni una garantía de precio o cuota.
+
+Puedes mezclar proveedores si T3 lo permite: por ejemplo, un profesor de Claude con un investigador de otro proveedor. La autenticación y los límites reales se comprueban al ejecutar una tarea necesaria, no lanzando agentes de prueba durante la configuración.
+
+Para cambiar el perfil, invoca `configurar modelos` o edita `study-models.json`. El [esquema y procedimiento](skills/t3-study/references/models.md) describen las opciones. El helper portable usa únicamente Python estándar:
+
+```text
+python scripts/study_models.py show
+python scripts/study_models.py check --environment ID --catalog /ruta/catalogo.json
+python scripts/study_models.py set --environment ID --catalog /ruta/catalogo.json --profile /ruta/perfil.json
 ```
 
-Si `pdftotext` no aparece, agrega la carpeta `bin` de Poppler al `PATH` (*Configuración → Sistema → Acerca de → Configuración avanzada del sistema → Variables de entorno*).
+Usa `python3` o `py` si ese es tu comando de Python. `check` y `set` reciben una instantánea real del catálogo de T3; no consultan proveedores ni inician clases. Desde otra carpeta, ejecuta el script por su ruta absoluta y usa `--workspace /ruta/t3-study`.
 
-### macOS
+Sin herramientas de descubrimiento de T3, el agente explica la limitación y ofrece estudiar sin subagentes. Si falta Python, puede revisar la configuración contra el catálogo sin afirmar que ejecutó el validador.
 
-```bash
-brew install git python poppler
-python3 -m pip install numpy scipy matplotlib
-```
+## Material y notas
 
-## 2. Instalación
+```text
+ramos/<sigla>/
+├── curso.md                 # programa, evaluaciones, unidades y mapa de fuentes
+├── material/                # material actual: programa, diapositivas, guías, notebooks
+└── material-adicional/      # fuentes adicionales y evaluaciones de otros semestres
 
-Linux / macOS:
-
-```bash
-git clone https://github.com/AndrewwAM/t3-study.git
-cd t3-study
-cp perfil.example.md perfil.md
-```
-
-Windows (PowerShell):
-
-```powershell
-git clone https://github.com/AndrewwAM/t3-study.git
-cd t3-study
-Copy-Item perfil.example.md perfil.md
-```
-
-Completa `perfil.md` con tu nombre, carrera y preferencias. Es opcional, pero el agente lo usa.
-
-> Mientras el repo sea privado, primero acepta la invitación de colaborador que llega a tu correo de GitHub. Al clonar, Git te pedirá iniciar sesión.
-
-## 3. Elegir proveedor y modelo
-
-T3 Study no depende de un proveedor: las instrucciones están en `AGENTS.md` y las skills en `.agents/skills/`. Para Claude hay además un `CLAUDE.md`. Elige en T3 el proveedor que tengas:
-
-| Proveedor en T3 | Modelo sugerido para estudiar | Estado |
-|---|---|---|
-| Antigravity (Google AI Pro) | Gemini 3.8 Flash (High) | Probado |
-| Claude | Claude Sonnet 5.5 (Opus para demostraciones difíciles) | Probado |
-| Cursor | Un modelo fuerte (Claude, Gemini o GPT) en lugar de los rápidos | Probado |
-| Codex | GPT-6.1 Sol, esfuerzo `high` | Compatible (versión anterior probada) |
-| OpenCode, Pi u otros | Cualquiera que lea `AGENTS.md` | Sin probar |
-
-Prefiere un modelo con razonamiento alto: el profesor tiene que verificar y planificar, no solo responder rápido.
-
-## 4. Configurar T3 Code
-
-1. **Proveedor:** en la configuración de T3, en la sección de proveedores, activa el tuyo e inicia sesión (cuenta de Google para Antigravity, de Anthropic para Claude, etc.).
-2. **Proyecto:** agrega un proyecto y elige la carpeta `t3-study` **raíz**, la que contiene `AGENTS.md`. Si eliges una carpeta superior o inferior, el agente no carga las instrucciones.
-3. **Modelo:** en el selector del hilo, elige proveedor y modelo (ver la tabla). Puedes dejarlo como predeterminado del proyecto.
-4. **Permisos:** el agente necesita crear y editar archivos en `notas/` y ejecutar comandos (Python, `pdftotext`). Usa el modo de acceso completo o uno que acepte ediciones automáticamente. Si no, T3 te pedirá aprobar cada paso.
-
-## 5. Agregar un ramo
-
-Cada ramo vive en `ramos/<sigla-corta>/`, por ejemplo `ramos/cc/`:
-
-```
-ramos/cc/
-├── material/                 ← TU material de este semestre: programa, ppts, guías, rúbricas, notebooks
-└── material-adicional/       ← material de otra persona o de semestres anteriores
-    └── 2026.1-lucas/         ← p. ej. una carpeta que te pasaron, tal cual
-```
-
-- `material/` es **lo oficial**: fechas, alcance de cada evaluación y notación salen de aquí. Pon el programa del ramo (syllabus o planificación): es lo primero que lee el agente.
-- `material-adicional/` sirve para practicar: certámenes anteriores, rúbricas y apuntes. Si contradice tu material actual, el agente te avisa y usa el actual.
-
-Luego, en un hilo nuevo:
-
-```
-configurar ramo cc
-```
-
-El agente lee el programa, arma `ramos/cc/curso.md` con evaluaciones, fechas, unidades y qué archivo corresponde a cada unidad, y te pide que lo revises. Repítelo cuando agregues material nuevo.
-
-## 6. Estudiar
-
-En un hilo nuevo del proyecto:
-
-| Escribes | Qué pasa |
-|---|---|
-| `estudiar cc para el C2` | Diagnóstico de lo que entra en el C2 → plan → clases por pasos |
-| `estudiar cc, mínimos cuadrados` | Lo mismo, acotado a un tema |
-| `practicar cc C2` | Diagnóstico corto y luego ejercicios tipo certamen, corregidos con criterio de rúbrica |
-| `seguir cc` | Retoma donde quedaste |
-| `tema independiente: transformers` | Un tema fuera de los ramos |
-
-**Cómo funciona una sesión:**
-
-1. **Diagnóstico.** Quizzes para encontrar dónde termina lo que sabes. Equivocarse aquí es útil.
-2. **Plan.** Te muestra el enfoque y un mapa de dependencias. **No empieza a enseñar hasta que lo apruebes** (`dale`) o pidas cambios.
-3. **Clases.** Un concepto a la vez: por qué importa, de dónde sale y cómo se conecta con lo anterior. Cada uno termina con un quiz y, en ramos de cálculo o programación, con un ejercicio tipo certamen.
-
-**Responder quizzes:** escribe el número (`3`), varios si corresponde (`1 y 3`), o `0` / `no sé`. «No sé» no cuenta como error: le muestra al agente dónde está tu límite. Si prefieres opciones clicables, pídelo (`hazme los quizzes con opciones clicables`).
-
-**Consejos:**
-
-- Usa **un hilo nuevo por sesión** y empieza con `seguir <ramo>`: los hilos muy largos empeoran al modelo.
-- Si algo te parece mal, dilo. El agente debe verificar en tu material o con Python, y corregir.
-- Para cortar a mitad de una sesión, escribe `paremos aquí`: el agente deja las notas listas para retomar.
-- Puedes cambiar de proveedor entre sesiones: las notas son archivos Markdown y cualquier modelo las retoma.
-
-## 7. Dónde queda todo
-
-```
 notas/
-├── index.md                              ← temas activos
-└── cc/minimos-cuadrados/
-    ├── _state.md                         ← qué sabes, plan, siguiente paso (para retomar)
-    ├── sessions/2026-10-19-…md           ← la clase: quizzes, plan, conceptos, fuentes
-    └── viz/                              ← gráficos generados
+├── index.md
+├── <sigla>/<tema>/
+│   ├── _state.md
+│   ├── sessions/FECHA-tema.md
+│   └── viz/
+└── independiente/<tema>/
+    ├── _state.md
+    └── sessions/FECHA-tema.md
 ```
 
-Puedes abrir `notas/` como bóveda de Obsidian.
+El material actual determina el alcance de las evaluaciones. El adicional sirve para practicar; el agente debe señalar diferencias de notación, alcance o teoría. Los archivos fuente se preservan. Cada pregunta usa un conjunto acotado de archivos, no una lectura completa del ramo.
 
-**Tus notas, tu material y `perfil.md` no se suben a Git** (están en `.gitignore`). Respáldalos por tu cuenta, por ejemplo con una carpeta sincronizada (Drive, OneDrive, MEGA) o un repo privado propio.
+Con una lección activa, **guardar apuntes es el comportamiento predeterminado**: el agente registra progreso real, fuentes y quizzes ya corregidos, usando `templates/`. Puedes abrir `notas/` en Obsidian, pero no es obligatorio. Puedes retomar con otro proveedor leyendo el mismo estado.
 
-## 8. Actualizar
+Si pides **“sin guardar apuntes”**, no se crean ni actualizan notas, índices, estados o figuras persistentes. El agente usa archivos temporales solo para cálculos/gráficos necesarios. Una selección de modelos puede mantenerse solo en la conversación; guardar configuración requiere tu elección separada. Retomar sin apuntes depende del historial del chat.
 
-```bash
-git pull
+El repo no incluye servidor de pizarra ni transcripción automática. Los quizzes son por chat y el agente escribe los apuntes; no tienes que copiarlos tú. Por defecto, las fórmulas del chat usan Unicode y las notas usan LaTeX. Puedes cambiar la preferencia si tu cliente renderiza LaTeX.
+
+Tus notas, cursos personales, `perfil.md` y `study-models.json` están ignorados por Git. Respáldalos aparte; no se suben automáticamente ni se incluyen en los cambios del framework.
+
+## Dependencias opcionales
+
+La lección en chat no necesita un servidor ni una base de datos. Para el validador de modelos usa Python 3.11 o posterior. Para cálculos y figuras, instala NumPy/SciPy/matplotlib en el entorno Python que uses; para PDFs sin lector nativo, Poppler aporta `pdftotext`. Obsidian es opcional.
+
+Puedes preparar un entorno Python aislado:
+
+```text
+python -m venv .venv
 ```
 
-Tus archivos están ignorados por Git, así que actualizar no los toca.
+Linux/macOS:
 
-## 9. Limitaciones
-
-- **No hay registro automático de la conversación.** El agente escribe la nota mientras avanza; si falta algo, pídele `actualiza las notas`.
-- **La respuesta de cada quiz vive solo en la memoria del modelo** hasta que respondes. No se muestra ni se guarda en archivos, pero tampoco está protegida técnicamente.
-- **El modelo puede equivocarse,** sobre todo con PDFs escaneados o manuscritos. Si algo no cuadra, pide `verifícalo en el material` o `verifícalo con Python`. Como referencia: Gemini 3.8 Flash (High) resolvió bien, con verificación numérica, una pregunta de 50 puntos de un certamen de Computación Científica.
-- **El chat de T3 no muestra fórmulas LaTeX** (`$x^2$` aparece tal cual). Por eso el agente escribe las fórmulas del chat con símbolos (`Aᵀr = 0`, `x ∈ ℝⁿ`, `‖r‖₂`) y usa LaTeX solo en las notas, que Obsidian sí muestra. Si algún día tu cliente muestra LaTeX, pon `Fórmulas en el chat: latex` en `perfil.md`.
-- Las instrucciones del agente están en inglés a propósito, porque los modelos las siguen mejor. Todo lo que tú ves sale en español.
-
-## 10. Estructura
-
-```
-AGENTS.md                      ← instrucciones (las leen Antigravity, Codex, Cursor, OpenCode…)
-CLAUDE.md                      ← redirige a AGENTS.md para Claude
-.agents/skills/
-├── study-teach/               ← método: diagnóstico → plan → clases
-├── study-research/            ← verificar en el material antes de afirmar
-├── study-quiz/                ← cómo construir y corregir quizzes
-├── study-visualize/           ← diagramas Mermaid y gráficos con Python
-└── study-course-setup/        ← configurar un ramo
-templates/                     ← plantillas de notas, estado y perfil de ramo
-ramos/_ejemplo/                ← estructura de muestra
-perfil.example.md              ← copia a perfil.md
+```text
+.venv/bin/python -m pip install numpy scipy matplotlib
 ```
 
-Para cambiar el comportamiento, edita `AGENTS.md` o las skills.
+Windows:
+
+```text
+.venv\Scripts\python.exe -m pip install numpy scipy matplotlib
+```
+
+Indica al agente ese Python si no está activo en su terminal. Si una dependencia falta, debe explicar qué comprobación no pudo hacer y ofrecer una alternativa; no afirmar que verificó un cálculo o una imagen que no pudo revisar.
+
+## Actualizar desde la versión anterior
+
+```text
+git pull --ff-only
+```
+
+Si tienes cambios propios en archivos del framework, revísalos antes de actualizar y resuelve cualquier conflicto conservando tu trabajo. El refactor mantiene `ramos/`, `notas/`, `perfil.md` y las plantillas: no hay migración destructiva de material o sesiones.
+
+Los antiguos `.agents/skills/study-*` pasan a ser referencias internas. La única entrada de estudio es `t3-study`. `AGENTS.md` deja de cargar el método pedagógico por defecto y `CLAUDE.md` importa solo las reglas generales.
+
+Abre un hilo nuevo y usa `$t3-study seguir <ramo>` o `/t3-study seguir <ramo>`. Decir solamente `estudiar` ya no activa el sistema. Si habías instalado copias globales de las skills antiguas por tu cuenta, revisa esas copias: actualizar este repo no las elimina.
+
+## Desarrollo y límites de verificación
+
+```text
+python -B -m unittest discover -s tests -v
+git diff --check
+```
+
+Las pruebas usan workspaces, perfiles y catálogos ficticios en directorios temporales. Comprueban la configuración inicial, validación de opciones/proveedores, conservación de otros perfiles y funcionamiento desde subcarpetas. No hacen llamadas a modelos ni escriben apuntes personales. CI ejecuta el helper en Linux, macOS y Windows; eso no certifica todas las combinaciones de proveedor/modelo ni una lección completa.
+
+El modelo puede equivocarse y las reglas de activación son instrucciones del agente, no un aislamiento de permisos. Verifica fuentes y resultados relevantes. El contenido de una skill ya usada puede permanecer en el contexto de un hilo; utiliza otro hilo si necesitas una separación completa entre estudio y trabajo.
+
+## Estructura del framework
+
+```text
+AGENTS.md                         # límites generales, sin enseñanza automática
+CLAUDE.md                         # importa esos límites
+.agents/skills/t3-study/           # entrada explícita de Codex
+.claude/skills/t3-study/            # entrada explícita de Claude
+skills/t3-study/SKILL.md           # flujo compartido
+skills/t3-study/references/        # módulos internos y configuración de modelos
+scripts/study_models.py            # validador portable, sin dependencias externas
+templates/                        # notas, estado, curso e índice
+ramos/_ejemplo/                    # estructura de muestra
+perfil.example.md                 # preferencias opcionales del estudiante
+tests/                            # pruebas aisladas
+```
+
+Edita la skill compartida o sus referencias para cambiar el método. Mantén las instrucciones pedagógicas fuera de `AGENTS.md` para que no afecten tareas normales.
