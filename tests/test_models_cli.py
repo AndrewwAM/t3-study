@@ -35,7 +35,8 @@ class ModelsCLITests(unittest.TestCase):
         self.assertEqual(result.returncode, 2, result.stderr)
         data = json.loads(result.stdout)
         self.assertEqual(data["status"], "setup_required")
-        self.assertEqual(data["config"], str(self.root / "study-models.json"))
+        # macOS temp paths and Windows short names can alias the resolved workspace.
+        self.assertEqual(data["config"], str(self.root.resolve() / "study-models.json"))
         self.assertEqual(list(self.course.iterdir()), [])
         self.assertFalse((self.root / "study-models.json").exists())
         self.assertFalse((self.root / "notas").exists())
